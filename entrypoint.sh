@@ -2,6 +2,10 @@
 
 set -e
 
+CATEGORIES="{\
+\"auth\":$AUTHCONFIG\
+}"
+
 if [ -z "$AWS_ACCESS_KEY_ID" ] && [ -z "$AWS_SECRET_ACCESS_KEY" ] ; then
   echo "You must provide the action with both AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY environment variables in order to deploy"
   exit 1
@@ -55,8 +59,15 @@ case $5 in
     echo '{"accessKeyId":"'$AWS_ACCESS_KEY_ID'","secretAccessKey":"'$AWS_SECRET_ACCESS_KEY'","region":"'$AWS_REGION'"}' > $aws_config_file_path
     echo '{"projectPath": "'"$(pwd)"'","defaultEditor":"code","envName":"'$6'"}' > ./amplify/.config/local-env-info.json
     echo '{"'$6'":{"configLevel":"project","useProfile":false,"awsConfigFilePath":"'$aws_config_file_path'"}}' > ./amplify/.config/local-aws-info.json
-    echo $AUTHCONFIG > ./amplify/authconfig.json
-    cat ./amplify/authconfig.json
+    
+    # if environment doesn't exist fail explicitly
+    if [ -z "$(amplify env get --name $6 | grep 'No environment found')" ] ; then
+      echo "found existing environment $6"
+      amplify env pull --categories $CATEGORIES --yes $9
+    else
+      echo "$6 environment does not exist, consider using add_env command instead";
+      exit 1
+    fi    
 
     amplify status
     ;;
