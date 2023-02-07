@@ -5,10 +5,10 @@
 [![LICENSE](https://img.shields.io/github/license/Tesuji-Code/amplify-cli-action)](https://github.com/Tesuji-Code/amplify-cli-action/blob/master/LICENSE)
 [![ISSUES](https://img.shields.io/github/issues/Tesuji-Code/amplify-cli-action)](https://github.com/Tesuji-Code/amplify-cli-action/issues)
   
-🚀 :octocat: AWS Amplify CLI support for github actions. This action supports configuring and deploying your project to AWS as well as creating and undeploying amplify environments.
+🚀 :octocat: AWS Amplify CLI support for github actions. This action supports importing an existing auth in amplify through the `amplify import auth` command
 
 ## Getting Started
-You can include the action in your workflow as `actions/amplify-cli-action@0.4.5`. Example (configuring amplify, building and deploying):
+You can include the action in your workflow as `Tesuji-Code/amplify-cli-action@master`. Example (configuring amplify, building and deploying):
 
 ```yaml
 name: 'Amplify Deploy'
@@ -32,10 +32,10 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: configure amplify
-      uses: Tesuji-Code/amplify-cli-action@0.4.5
+      uses: Tesuji-Code/amplify-cli-action@master
       with:
         amplify_command: import
-        amplify_env: prod
+        amplify_env: dev
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
