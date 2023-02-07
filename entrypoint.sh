@@ -3,7 +3,7 @@
 set -e
 
 CATEGORIES="{\
-\"auth\":$AUTHCONFIG\
+\"auth\":"$AUTHCONFIG"\
 }"
 
 if [ -z "$AWS_ACCESS_KEY_ID" ] && [ -z "$AWS_SECRET_ACCESS_KEY" ] ; then
