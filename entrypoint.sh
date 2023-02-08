@@ -2,10 +2,6 @@
 
 set -e
 
-CATEGORIES="{\
-\"auth\":\"$AUTHCONFIG\"\
-}"
-
 if [ -z "$AWS_ACCESS_KEY_ID" ] && [ -z "$AWS_SECRET_ACCESS_KEY" ] ; then
   echo "You must provide the action with both AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY environment variables in order to deploy"
   exit 1
@@ -56,14 +52,14 @@ echo "amplify version $(amplify --version)"
 case $5 in
   import)
     aws_config_file_path="$(pwd)/aws_config_file_path.json"
-    echo '{"accessKeyId":"'$AWS_ACCESS_KEY_ID'","secretAccessKey":"'$AWS_SECRET_ACCESS_KEY'","region":"'$AWS_REGION'"}' > $aws_config_file_path
+    echo '{"accessKeyId":"'$AWS_ACCESS_KEY_ID'","secretAccessKey":"'$AWS_SECRET_ACCESS_KEY'","region":"'$AWS_REGION'","userPoolId":"'$AWS_USER_POOL_ID'","webClientId":"'$AWS_WEB_CLIENT_ID'","nativeClientId":"'$AWS_NATIVE_CLIENT_ID'","identityPoolId":"'$AWS_IDENTITY_POOL'","facebookAppIdUserPool":"'$FACEBOOK_APP_ID'","facebookAppSecretUserPool":"'$FACEBOOK_SECRET'", "googleAppIdUserPool":"'$GOOGLE_APP_ID'", "googleAppSecretUserPool":"'$GOOGLE_SECRET'"}' > $aws_config_file_path
     echo '{"projectPath": "'"$(pwd)"'","defaultEditor":"code","envName":"'$6'"}' > ./amplify/.config/local-env-info.json
     echo '{"'$6'":{"configLevel":"project","useProfile":false,"awsConfigFilePath":"'$aws_config_file_path'"}}' > ./amplify/.config/local-aws-info.json
     
     # if environment doesn't exist fail explicitly
     if [ -z "$(amplify env get --name $6 | grep 'No environment found')" ] ; then
       echo "found existing environment $6"
-      amplify env pull --categories $CATEGORIES --yes $9
+      amplify env pull --yes $9
     else
       echo "$6 environment does not exist, consider using add_env command instead";
       exit 1
