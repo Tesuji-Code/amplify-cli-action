@@ -1,6 +1,7 @@
-#!/bin/bash -l
+#!/bin/bash
 
 set -e
+IFS='|'
 
 if [ -z "$AWS_ACCESS_KEY_ID" ] && [ -z "$AWS_SECRET_ACCESS_KEY" ] && [ -z "$AWS_USER_POOL_ID" ] && [ -z "$AWS_WEB_CLIENT_ID" ] && [ -z "$AWS_NATIVE_CLIENT_ID" ] && [ -z "$AWS_IDENTITY_POOL" ] && [ -z "$FACEBOOK_APP_ID" ] && [ -z "$FACEBOOK_SECRET" ] && [ -z "$GOOGLE_APP_ID" ] && [ -z "$GOOGLE_SECRET" ] ; then
   echo "You must provide the action with both AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY environment variables in order to deploy"
@@ -50,27 +51,13 @@ case $5 in
     echo '{"accessKeyId":"'$AWS_ACCESS_KEY_ID'","secretAccessKey":"'$AWS_SECRET_ACCESS_KEY'","region":"'$AWS_REGION'"}' > $aws_config_file_path
     echo '{"projectPath": "'"$(pwd)"'","defaultEditor":"code","envName":"'$6'"}' > ./amplify/.config/local-env-info.json
     echo '{"'$6'":{"configLevel":"project","useProfile":false,"awsConfigFilePath":"'$aws_config_file_path'"}}' > ./amplify/.config/local-aws-info.json
-    
-    AUTHCONFIG="{\
-    \"userPoolId\":\"$AWS_USER_POOL_ID\",\
-    \"webClientId\":\"$AWS_WEB_CLIENT_ID\",\
-    \"nativeClientId\":\"$AWS_NATIVE_CLIENT_ID\",\
-    \"identityPoolId\":\"$AWS_IDENTITY_POOL\",\
-    \"facebookAppIdUserPool\":\"$FACEBOOK_APP_ID\",\
-    \"facebookAppSecretUserPool\":\"$FACEBOOK_SECRET\",\
-    \"googleAppIdUserPool\":\"$GOOGLE_APP_ID\",\
-    \"googleAppSecretUserPool\":\"$GOOGLE_SECRET\"\
-    }"
-
-    CATEGORIES="{\
-    \"auth\":$AUTHCONFIG\
-    }"
+    echo '{"auth":{"userPoolId":"'$AWS_USER_POOL_ID'","webClientId":"'$AWS_WEB_CLIENT_ID'","nativeClientId":"'$AWS_NATIVE_CLIENT_ID'","identityPoolId":"'$AWS_IDENTITY_POOL'","facebookAppIdUserPool":"'$FACEBOOK_APP_ID'","facebookAppSecretUserPool":"'$FACEBOOK_SECRET'","googleAppIdUserPool":"'$GOOGLE_APP_ID'","googleAppSecretUserPool":"'$GOOGLE_SECRET'"}}'  > ./amplify/.config/auth.json
     
     
     # if environment doesn't exist fail explicitly
     if [ -z "$(amplify env get --name $6 | grep 'No environment found')" ] ; then
       echo "found existing environment $6"
-      amplify env pull --categories $CATEGORIES --yes $9
+      amplify env pull --categories ./amplify/.config/auth.json --yes
     else
       echo "$6 environment does not exist, consider using add_env command instead";
       exit 1
