@@ -52,10 +52,10 @@ case $5 in
     echo '{"'$6'":{"configLevel":"project","useProfile":false,"awsConfigFilePath":"'$aws_config_file_path'"}}' > ./amplify/.config/local-aws-info.json
     
     AUTHCONFIG="{\
-    \"userPoolId\": \"$AWS_USER_POOL_ID\",\
-    \"webClientId\": \"$AWS_WEB_CLIENT_ID\",\
-    \"nativeClientId\": \"$AWS_NATIVE_CLIENT_ID\",\
-    \"identityPoolId\": \"$AWS_IDENTITY_POOL\",\
+    \"userPoolId\":\"$AWS_USER_POOL_ID\",\
+    \"webClientId\":\"$AWS_WEB_CLIENT_ID\",\
+    \"nativeClientId\":\"$AWS_NATIVE_CLIENT_ID\",\
+    \"identityPoolId\":\"$AWS_IDENTITY_POOL\",\
     \"facebookAppIdUserPool\":\"$FACEBOOK_APP_ID\",\
     \"facebookAppSecretUserPool\":\"$FACEBOOK_SECRET\",\
     \"googleAppIdUserPool\":\"$GOOGLE_APP_ID\",\
