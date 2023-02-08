@@ -2,13 +2,8 @@
 
 set -e
 
-if [ -z "$AWS_ACCESS_KEY_ID" ] && [ -z "$AWS_SECRET_ACCESS_KEY" ] ; then
+if [ -z "$AWS_ACCESS_KEY_ID" ] && [ -z "$AWS_SECRET_ACCESS_KEY" ] && [ -z "$AWS_USER_POOL_ID" ] && [ -z "$AWS_WEB_CLIENT_ID" ] && [ -z "$AWS_NATIVE_CLIENT_ID" ] && [ -z "$AWS_IDENTITY_POOL" ] && [ -z "$FACEBOOK_APP_ID" ] && [ -z "$FACEBOOK_SECRET" ] && [ -z "$GOOGLE_APP_ID" ] && [ -z "$GOOGLE_SECRET" ] ; then
   echo "You must provide the action with both AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY environment variables in order to deploy"
-  exit 1
-fi
-
-if [ -z "$AUTHCONFIG" ] ; then
-  echo "You must provide AUTHCONFIG environment variables in order to deploy"
   exit 1
 fi
 
